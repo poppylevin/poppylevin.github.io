@@ -1,0 +1,7 @@
+body {
+    min-height: 100vh;
+    background-image: url(/content/img/home-page.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.thumbnail img { max-height: 200px; }
