@@ -306,6 +306,77 @@
   .turtle-emoji { font-size: 3rem; }
   .turtle-name { font-family: 'Fredoka One', cursive; font-size: 0.85rem; margin-top: 0.3rem; color: var(--teal); }
 
+  /* ===== DAD JOKES ===== */
+  .joke-card {
+    background: linear-gradient(135deg, #2a1500, #1a0d00);
+    border: 3px solid var(--orange); border-radius: 20px;
+    padding: 2.5rem 2rem; text-align: center;
+    position: relative; overflow: hidden;
+    min-height: 180px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 1rem;
+  }
+  .joke-number {
+    position: absolute; top: 0.8rem; right: 1.2rem;
+    font-size: 0.85rem; color: rgba(255,255,255,0.3);
+    font-family: 'Fredoka One', cursive;
+  }
+  .joke-setup {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.5rem; color: var(--yellow); line-height: 1.4;
+  }
+  .joke-punchline {
+    font-family: 'Nunito', sans-serif; font-weight: 900;
+    font-size: 1.3rem; color: var(--orange);
+    animation: punchPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: none;
+  }
+  .joke-punchline.visible { display: block; }
+  @keyframes punchPop {
+    0% { transform: scale(0) rotate(-5deg); opacity: 0; }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+  }
+  .joke-emoji-big {
+    font-size: 3rem;
+    animation: wobble 1s ease-in-out infinite;
+  }
+  @keyframes wobble {
+    0%,100% { transform: rotate(-5deg); }
+    50% { transform: rotate(5deg); }
+  }
+  .rating-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .btn-orange { background: var(--orange); color: var(--navy); }
+  .btn-yellow { background: var(--yellow); color: var(--navy); }
+  .joke-score-board {
+    display: flex; justify-content: center; gap: 3rem; margin: 1.5rem 0;
+  }
+  .joke-score-item { text-align: center; }
+  .joke-score-val {
+    font-family: 'Fredoka One', cursive; font-size: 2.5rem;
+    line-height: 1;
+  }
+  .joke-score-label { font-size: 0.85rem; opacity: 0.6; margin-top: 0.2rem; }
+  .joke-meter-wrap { margin: 0.5rem 0 1.5rem; }
+  .joke-meter-label {
+    text-align: center; font-family: 'Fredoka One', cursive;
+    font-size: 1rem; color: rgba(255,255,255,0.5); margin-bottom: 0.4rem;
+  }
+  .joke-meter-bar {
+    width: 100%; max-width: 400px; height: 20px;
+    background: rgba(255,255,255,0.1); border-radius: 50px;
+    margin: 0 auto; overflow: hidden; position: relative;
+  }
+  .joke-meter-fill {
+    height: 100%; border-radius: 50px;
+    background: linear-gradient(90deg, var(--hot-pink), var(--orange), var(--yellow));
+    transition: width 0.5s ease;
+    width: 50%;
+  }
+  .joke-meter-ends {
+    display: flex; justify-content: space-between;
+    max-width: 400px; margin: 0.3rem auto 0;
+    font-size: 0.8rem; opacity: 0.5;
+  }
+
   /* ===== FOOTER ===== */
   footer {
     position: relative; z-index: 1;
@@ -365,6 +436,7 @@
   <button class="nav-btn" onclick="showSection('tictactoe')">🎮 Tic-Tac-Toe</button>
   <button class="nav-btn" onclick="showSection('pickles')">🥒 Pickle Garden</button>
   <button class="nav-btn" onclick="showSection('turtles')">🐢 Turtle Squad</button>
+  <button class="nav-btn" onclick="showSection('dadjokes')">😂 Dad Jokes</button>
 </nav>
 
 <!-- ABOUT SECTION -->
@@ -520,6 +592,53 @@
   <div style="text-align:center; margin-top:1rem">
     <button class="game-btn btn-cyan" onclick="addTurtle()">➕ Add a Turtle</button>
     <button class="game-btn btn-lime" onclick="paradeMode()" id="paradeBtn">🎉 Turtle Parade!</button>
+  </div>
+</section>
+
+<!-- DAD JOKES -->
+<section id="dadjokes">
+  <div class="section-title" style="color:var(--orange)">😂 Dad Joke-O- Rama 😂</div>
+  <p style="text-align:center; color:rgba(255,255,255,0.6); margin-bottom:1.5rem">
+    Warning: These jokes are so bad, they're good. Maybe.
+  </p>
+
+  <div class="joke-card">
+    <div class="joke-number" id="jokeNumber">1 / 23</div>
+    <div class="joke-emoji-big" id="jokeEmoji">😄</div>
+    <div class="joke-setup" id="jokeSetup">Loading a totally great joke...</div>
+    <div class="joke-punchline" id="jokePunchline"></div>
+  </div>
+
+  <div style="text-align:center; margin-top:1rem">
+    <button class="game-btn btn-yellow" id="punchlineBtn" onclick="showPunchline()">🥁 Show Punchline!</button>
+    <button class="game-btn btn-orange" onclick="nextJoke()" id="nextJokeBtn">⏭️ Next Joke</button>
+  </div>
+
+  <div class="rating-btns" id="ratingBtns" style="margin-top:1rem; display:none;">
+    <button class="game-btn btn-lime" onclick="rateJoke(true)">😂 Ha! That's funny!</button>
+    <button class="game-btn btn-pink" onclick="rateJoke(false)">😒 Ugh, groan...</button>
+  </div>
+
+  <div class="joke-score-board" style="margin-top:2rem">
+    <div class="joke-score-item">
+      <div class="joke-score-val" id="jokeLaughs" style="color:var(--lime)">0</div>
+      <div class="joke-score-label">😂 Laughs</div>
+    </div>
+    <div class="joke-score-item">
+      <div class="joke-score-val" id="jokeGroans" style="color:var(--hot-pink)">0</div>
+      <div class="joke-score-label">😒 Groans</div>
+    </div>
+  </div>
+
+  <div class="joke-meter-wrap">
+    <div class="joke-meter-label" id="jokeMeterLabel">Rate some jokes to fill the meter!</div>
+    <div class="joke-meter-bar">
+      <div class="joke-meter-fill" id="jokeMeterFill"></div>
+    </div>
+    <div class="joke-meter-ends">
+      <span>😒 All Groans</span>
+      <span>😂 All Laughs</span>
+    </div>
   </div>
 </section>
 
@@ -758,6 +877,79 @@ function paradeMode() {
 }
 
 initTurtles();
+
+// ===== DAD JOKES =====
+const dadJokes = [
+  {e:'🥒', setup:"Why did the pickle go to the party?", punchline:"Because it was a big dill! 🥒"},
+  {e:'🐢', setup:"Why did the turtle cross the road?", punchline:"To get to the shell station! 🐢"},
+  {e:'🐟', setup:"What do you call a fish without eyes?", punchline:"A fsh! 🐟"},
+  {e:'🌾', setup:"Why did the scarecrow win an award?", punchline:"Because he was outstanding in his field! 🌾"},
+  {e:'🦕', setup:"What do you call a sleeping dinosaur?", punchline:"A dino-snore! 🦕"},
+  {e:'🚲', setup:"Why can't a bicycle stand up by itself?", punchline:"Because it's two-tired! 🚲"},
+  {e:'🧀', setup:"What do you call cheese that isn't yours?", punchline:"Nacho cheese! 🧀"},
+  {e:'📚', setup:"Why did the math book look so sad?", punchline:"Because it had too many problems! 📚"},
+  {e:'🐻', setup:"What do you call a bear with no teeth?", punchline:"A gummy bear! 🐻"},
+  {e:'🐄', setup:"Why do cows wear bells?", punchline:"Because their horns don't work! 🐄"},
+  {e:'🍝', setup:"What do you call a fake noodle?", punchline:"An impasta! 🍝"},
+  {e:'🦘', setup:"What do you call a lazy kangaroo?", punchline:"A pouch potato! 🦘"},
+  {e:'🍪', setup:"Why did the cookie go to the doctor?", punchline:"Because it was feeling crummy! 🍪"},
+  {e:'🌶️', setup:"What do you call a nosy pepper?", punchline:"Jalapeño business! 🌶️"},
+  {e:'🐊', setup:"What do you call an alligator in a vest?", punchline:"An investigator! 🐊"},
+  {e:'⚛️', setup:"Why don't scientists trust atoms?", punchline:"Because they make up everything! ⚛️"},
+  {e:'🐰', setup:"What do you call rabbits hopping backwards?", punchline:"A receding hare-line! 🐰"},
+  {e:'🌊', setup:"What did the ocean say to the beach?", punchline:"Nothing, it just waved! 🌊"},
+  {e:'☃️', setup:"What do you call a snowman throwing a tantrum?", punchline:"A meltdown! ☃️"},
+  {e:'🎵', setup:"Why did the music teacher need a ladder?", punchline:"To reach the high notes! 🎵"},
+  {e:'❄️', setup:"Why can't you give Elsa a balloon?", punchline:"Because she'll let it go! ❄️"},
+  {e:'⛳', setup:"Why did the golfer bring extra pants?", punchline:"In case he got a hole in one! ⛳"},
+  {e:'😄', setup:"What's a skeleton's least favorite room?", punchline:"The living room! 💀"},
+];
+
+let jokeIndex = 0, jokeLaughs = 0, jokeGroans = 0, jokePunchlineShown = false;
+const jokeOrder = [...Array(dadJokes.length).keys()].sort(()=>Math.random()-0.5);
+
+function loadJoke(idx) {
+  const j = dadJokes[jokeOrder[idx % jokeOrder.length]];
+  document.getElementById('jokeEmoji').textContent = j.e;
+  document.getElementById('jokeSetup').textContent = j.setup;
+  document.getElementById('jokePunchline').textContent = j.punchline;
+  document.getElementById('jokePunchline').classList.remove('visible');
+  document.getElementById('jokeNumber').textContent = `${(idx % jokeOrder.length) + 1} / ${jokeOrder.length}`;
+  document.getElementById('ratingBtns').style.display = 'none';
+  document.getElementById('punchlineBtn').style.display = '';
+  jokePunchlineShown = false;
+}
+
+function showPunchline() {
+  document.getElementById('jokePunchline').classList.add('visible');
+  document.getElementById('ratingBtns').style.display = 'flex';
+  document.getElementById('punchlineBtn').style.display = 'none';
+  jokePunchlineShown = true;
+}
+
+function nextJoke() {
+  jokeIndex++;
+  loadJoke(jokeIndex);
+}
+
+function rateJoke(funny) {
+  if(funny) { jokeLaughs++; launchConfetti(); } else { jokeGroans++; }
+  document.getElementById('jokeLaughs').textContent = jokeLaughs;
+  document.getElementById('jokeGroans').textContent = jokeGroans;
+  updateJokeMeter();
+  setTimeout(nextJoke, 600);
+}
+
+function updateJokeMeter() {
+  const total = jokeLaughs + jokeGroans;
+  const pct = total === 0 ? 50 : Math.round((jokeLaughs / total) * 100);
+  document.getElementById('jokeMeterFill').style.width = pct + '%';
+  const labels = ['😒 Total groan-fest!', '😬 Mostly groans...', '😐 Pretty mixed...', '😄 More laughs than groans!', '😂 Pure comedy gold!!'];
+  const li = Math.min(4, Math.floor(pct / 20));
+  document.getElementById('jokeMeterLabel').textContent = total === 0 ? 'Rate some jokes to fill the meter!' : labels[li];
+}
+
+loadJoke(0);
 </script>
 </body>
 </html>
