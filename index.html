@@ -1,42 +1,763 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>hello, world</title>
-    <link rel="stylesheet" href="/content/css/style.css" />
-    <script src="https://code.jquery.com/jquery-3.6.1.slim.min.js" integrity="sha256-w8CvhFs7iHNVUtnSP0YKEg00p9Ih13rlL9zGqvLdePA=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="/content/vendor/ekko-lightbox/ekko-lightbox.css">
-    <script src="/content/vendor/ekko-lightbox/ekko-lightbox.min.js"></script>
-    <style>
-        
-    </style>
-  </head>
-  <body>
-    <nav class="navbar navbar-expand-lg bg-dark">
-      <div class="container">
-        <a class="navbar-brand" href="#">Hello</a>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Poppy's World</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;900&display=swap');
+
+  :root {
+    --lime: #c8f135;
+    --hot-pink: #ff4db8;
+    --cyan: #00e5ff;
+    --orange: #ff7c1e;
+    --purple: #b44dff;
+    --yellow: #ffe94d;
+    --teal: #00d4aa;
+    --navy: #1a1a3e;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--navy);
+    color: white;
+    overflow-x: hidden;
+  }
+
+  /* ===== FLOATING BACKGROUND SHAPES ===== */
+  .bg-shapes {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+  }
+  .bg-shape {
+    position: absolute; border-radius: 50%; opacity: 0.07;
+    animation: floatBg 12s ease-in-out infinite;
+  }
+  @keyframes floatBg {
+    0%,100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-40px) rotate(180deg); }
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    position: relative; z-index: 1; text-align: center;
+    padding: 3rem 1rem 2rem;
+    background: linear-gradient(135deg, #0d0d2b 0%, #1a0533 50%, #0d1a33 100%);
+    border-bottom: 4px solid var(--hot-pink);
+    overflow: hidden;
+  }
+  .hero-stars {
+    position: absolute; inset: 0; pointer-events: none;
+  }
+  .star {
+    position: absolute; background: white; border-radius: 50%;
+    animation: twinkle 2s ease-in-out infinite;
+  }
+  @keyframes twinkle {
+    0%,100% { opacity: 0.2; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.4); }
+  }
+
+  .hero-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(3rem, 10vw, 7rem);
+    line-height: 1;
+    background: linear-gradient(90deg, var(--hot-pink), var(--cyan), var(--lime), var(--yellow), var(--hot-pink));
+    background-size: 300% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 3s linear infinite;
+    filter: drop-shadow(0 0 20px rgba(255,77,184,0.5));
+  }
+  @keyframes shimmer {
+    0% { background-position: 0% center; }
+    100% { background-position: 300% center; }
+  }
+  .hero-sub {
+    font-size: 1.3rem; font-weight: 700; color: var(--cyan);
+    margin-top: 0.5rem; letter-spacing: 2px;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
+
+  .bouncing-items {
+    display: flex; justify-content: center; gap: 2rem; margin-top: 2rem; flex-wrap: wrap;
+  }
+  .bounce-item {
+    font-size: 3rem;
+    animation: bounce 1s ease-in-out infinite;
+    cursor: default;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+  }
+  .bounce-item:nth-child(1) { animation-delay: 0s; }
+  .bounce-item:nth-child(2) { animation-delay: 0.15s; }
+  .bounce-item:nth-child(3) { animation-delay: 0.3s; }
+  .bounce-item:nth-child(4) { animation-delay: 0.45s; }
+  .bounce-item:nth-child(5) { animation-delay: 0.6s; }
+  .bounce-item:nth-child(6) { animation-delay: 0.75s; }
+  @keyframes bounce {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-18px); }
+  }
+
+  /* ===== NAV ===== */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    display: flex; justify-content: center; gap: 0.5rem; flex-wrap: wrap;
+    padding: 0.75rem 1rem;
+    background: rgba(10,10,30,0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 3px solid var(--purple);
+  }
+  .nav-btn {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1rem; padding: 0.4rem 1.2rem;
+    border: 2px solid transparent; border-radius: 50px;
+    background: transparent; color: white;
+    cursor: pointer; transition: all 0.2s;
+    letter-spacing: 0.5px;
+  }
+  .nav-btn:hover, .nav-btn.active {
+    background: var(--hot-pink); border-color: var(--hot-pink);
+    transform: scale(1.05); box-shadow: 0 0 15px rgba(255,77,184,0.4);
+  }
+
+  /* ===== SECTIONS ===== */
+  section {
+    position: relative; z-index: 1;
+    padding: 3rem 1rem; max-width: 900px; margin: 0 auto;
+    display: none;
+  }
+  section.active { display: block; }
+
+  .section-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2.5rem; margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  /* ===== ABOUT / BIO ===== */
+  .bio-card {
+    background: linear-gradient(135deg, #1e1040, #0d2040);
+    border: 3px solid var(--cyan); border-radius: 20px;
+    padding: 2rem; position: relative; overflow: hidden;
+  }
+  .bio-card::before {
+    content: ''; position: absolute; inset: -50%;
+    background: conic-gradient(from 0deg, transparent 0deg, rgba(0,229,255,0.05) 60deg, transparent 120deg);
+    animation: spin 8s linear infinite;
+  }
+  @keyframes spin { 100% { transform: rotate(360deg); } }
+  .bio-inner { position: relative; z-index: 1; }
+  .bio-placeholder {
+    color: rgba(255,255,255,0.4);
+    font-style: italic; font-size: 1.1rem;
+    border: 2px dashed rgba(0,229,255,0.3);
+    border-radius: 12px; padding: 1.5rem; text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  .tag-cloud { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 1rem; }
+  .tag {
+    padding: 0.4rem 1rem; border-radius: 50px;
+    font-weight: 700; font-size: 0.9rem;
+    animation: tagPop 0.3s ease;
+  }
+  @keyframes tagPop { from { transform: scale(0); } to { transform: scale(1); } }
+
+  /* ===== INTERESTS GRID ===== */
+  .interests-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.2rem;
+  }
+  .interest-card {
+    border-radius: 16px; padding: 1.5rem 1rem;
+    text-align: center; cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 3px solid transparent;
+  }
+  .interest-card:hover {
+    transform: translateY(-8px) rotate(-2deg);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+  }
+  .interest-card .icon { font-size: 3rem; margin-bottom: 0.5rem; display: block; }
+  .interest-card h3 { font-family: 'Fredoka One', cursive; font-size: 1.2rem; }
+  .interest-card p { font-size: 0.85rem; opacity: 0.85; margin-top: 0.3rem; }
+
+  /* ===== TIC TAC TOE ===== */
+  .game-container { text-align: center; }
+  .game-status {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.5rem; margin-bottom: 1rem; min-height: 2rem;
+    color: var(--yellow);
+  }
+  .ttt-board {
+    display: inline-grid; grid-template-columns: repeat(3, 1fr);
+    gap: 8px; padding: 8px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 16px; margin: 0 auto;
+  }
+  .ttt-cell {
+    width: 90px; height: 90px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fredoka One', cursive; font-size: 2.8rem;
+    border: 3px solid rgba(255,255,255,0.15); border-radius: 12px;
+    cursor: pointer; transition: all 0.15s;
+    background: rgba(255,255,255,0.04);
+    user-select: none;
+  }
+  .ttt-cell:hover:not(.taken) {
+    background: rgba(255,255,255,0.1);
+    border-color: var(--cyan);
+    transform: scale(1.05);
+  }
+  .ttt-cell.taken { cursor: default; }
+  .ttt-cell.x { color: var(--hot-pink); }
+  .ttt-cell.o { color: var(--cyan); }
+  .ttt-cell.winner { background: rgba(255,228,0,0.2); border-color: var(--yellow) !important; animation: winPulse 0.5s ease; }
+  @keyframes winPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.1)} }
+
+  .score-board {
+    display: flex; justify-content: center; gap: 2rem;
+    margin: 1.5rem 0; flex-wrap: wrap;
+  }
+  .score-item {
+    text-align: center;
+    background: rgba(255,255,255,0.05);
+    border-radius: 12px; padding: 0.8rem 1.5rem;
+    border: 2px solid rgba(255,255,255,0.1);
+    min-width: 80px;
+  }
+  .score-label { font-size: 0.85rem; opacity: 0.7; }
+  .score-val { font-family: 'Fredoka One', cursive; font-size: 2rem; }
+
+  .game-btn {
+    font-family: 'Fredoka One', cursive; font-size: 1.1rem;
+    padding: 0.7rem 2rem; border: none; border-radius: 50px;
+    cursor: pointer; margin: 0.5rem;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .game-btn:hover { transform: scale(1.05); }
+  .btn-pink { background: var(--hot-pink); color: white; }
+  .btn-cyan { background: var(--cyan); color: var(--navy); }
+  .btn-lime { background: var(--lime); color: var(--navy); }
+
+  /* vs label */
+  .vs-label {
+    display: flex; align-items: center; gap: 1rem;
+    justify-content: center; margin-bottom: 1rem;
+  }
+  .player-badge {
+    font-family: 'Fredoka One', cursive;
+    padding: 0.4rem 1.2rem; border-radius: 50px; font-size: 1rem;
+  }
+
+  /* ===== PICKLE GARDEN ===== */
+  .pickle-garden {
+    min-height: 300px;
+    background: linear-gradient(180deg, #0a2010 0%, #0d3015 100%);
+    border-radius: 20px; border: 3px solid var(--teal);
+    padding: 1rem; position: relative; overflow: hidden;
+    cursor: crosshair;
+  }
+  .pickle-canvas { width: 100%; height: 260px; position: relative; }
+  .garden-title {
+    font-family: 'Fredoka One', cursive;
+    text-align: center; color: var(--lime);
+    margin-bottom: 1rem; font-size: 1.3rem;
+  }
+  .pickle {
+    position: absolute; font-size: 2rem;
+    animation: grow 0.3s ease-out;
+    cursor: default; user-select: none;
+    transform-origin: bottom center;
+  }
+  @keyframes grow {
+    from { transform: scaleY(0) translateY(50%); opacity: 0; }
+    to { transform: scaleY(1) translateY(0); opacity: 1; }
+  }
+  .garden-hint {
+    text-align: center; color: rgba(255,255,255,0.4);
+    font-size: 0.9rem; margin-top: 0.5rem;
+  }
+  .garden-count {
+    text-align: center; font-family: 'Fredoka One', cursive;
+    color: var(--lime); font-size: 1.2rem; margin-top: 0.5rem;
+  }
+
+  /* ===== TURTLE GALLERY ===== */
+  .turtle-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 1rem; margin-top: 1rem; }
+  .turtle-card {
+    width: 120px; height: 120px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 16px; border: 2px solid rgba(0,212,170,0.3);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    cursor: pointer; transition: all 0.2s;
+    font-size: 0.8rem; color: rgba(255,255,255,0.7);
+    padding: 0.5rem;
+  }
+  .turtle-card:hover {
+    transform: scale(1.1) rotate(5deg);
+    border-color: var(--teal);
+    background: rgba(0,212,170,0.15);
+  }
+  .turtle-emoji { font-size: 3rem; }
+  .turtle-name { font-family: 'Fredoka One', cursive; font-size: 0.85rem; margin-top: 0.3rem; color: var(--teal); }
+
+  /* ===== FOOTER ===== */
+  footer {
+    position: relative; z-index: 1;
+    text-align: center; padding: 2rem;
+    border-top: 3px solid var(--purple);
+    background: rgba(0,0,0,0.5);
+    font-family: 'Fredoka One', cursive;
+    color: rgba(255,255,255,0.5);
+  }
+  footer span { color: var(--hot-pink); }
+
+  /* ===== CONFETTI ===== */
+  .confetti-piece {
+    position: fixed; width: 10px; height: 10px;
+    top: -10px; pointer-events: none; z-index: 9999;
+    animation: confettiFall linear forwards;
+  }
+  @keyframes confettiFall {
+    to { top: 110vh; transform: rotate(720deg); }
+  }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--navy); }
+  ::-webkit-scrollbar-thumb { background: var(--purple); border-radius: 3px; }
+
+  @media (max-width: 480px) {
+    .ttt-cell { width: 75px; height: 75px; font-size: 2.2rem; }
+    .bouncing-items { gap: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Floating BG shapes -->
+<div class="bg-shapes" id="bgShapes"></div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-stars" id="heroStars"></div>
+  <div class="hero-title">POPPY'S WORLD</div>
+  <div class="hero-sub">✨ BRIGHT · BOLD · TOTALLY AWESOME ✨</div>
+  <div class="bouncing-items">
+    <span class="bounce-item" title="Pickles!">🥒</span>
+    <span class="bounce-item" title="Turtles!">🐢</span>
+    <span class="bounce-item" title="Roblox!">🎮</span>
+    <span class="bounce-item" title="Art!">🎨</span>
+    <span class="bounce-item" title="Music!">🎵</span>
+    <span class="bounce-item" title="YouTube!">📺</span>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <button class="nav-btn active" onclick="showSection('about')">🌟 About</button>
+  <button class="nav-btn" onclick="showSection('interests')">🎯 Interests</button>
+  <button class="nav-btn" onclick="showSection('tictactoe')">🎮 Tic-Tac-Toe</button>
+  <button class="nav-btn" onclick="showSection('pickles')">🥒 Pickle Garden</button>
+  <button class="nav-btn" onclick="showSection('turtles')">🐢 Turtle Squad</button>
+</nav>
+
+<!-- ABOUT SECTION -->
+<section id="about" class="active">
+  <div class="section-title" style="background: linear-gradient(90deg,var(--cyan),var(--lime)); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">
+    All About Poppy
+  </div>
+  <div class="bio-card">
+    <div class="bio-inner">
+      <div class="bio-placeholder">
+        ✏️ Bio coming soon — drop it in here!<br>
+        <span style="font-size:0.85rem; opacity:0.6">(This spot is reserved for Poppy's amazing story)</span>
       </div>
-    </nav>
-    <div class="container container-fluid">
-      <main>
-        <h2>art</h2>
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="row">
-                  <div class="col-md-3">
-                    <a href="/content/art/2022/09/2022-09-22 - balloon head.jpg" data-toggle="lightbox" data-gallery="example-gallery" class="col-sm-4 thumbnail" data-title="balloon head" data-footer="2022-09-12">
-                      <img src="/content/art/2022/09/2022-09-22 - balloon head.jpg" class="img-fluid">
-                    </a>
-                  </div>
-                </div>
-            </div>
-        </div>  
-      </main>
+      <div class="tag-cloud">
+        <span class="tag" style="background:#ff4db830; color:var(--hot-pink); border:2px solid var(--hot-pink)">🥒 Pickle Enthusiast</span>
+        <span class="tag" style="background:#00d4aa30; color:var(--teal); border:2px solid var(--teal)">🐢 Turtle Fan</span>
+        <span class="tag" style="background:#b44dff30; color:var(--purple); border:2px solid var(--purple)">🎮 Gamer</span>
+        <span class="tag" style="background:#c8f13530; color:var(--lime); border:2px solid var(--lime)">🎨 Artist</span>
+        <span class="tag" style="background:#ffe94d30; color:var(--yellow); border:2px solid var(--yellow)">🧩 Puzzle Master</span>
+        <span class="tag" style="background:#ff7c1e30; color:var(--orange); border:2px solid var(--orange)">📺 YouTuber</span>
+        <span class="tag" style="background:#00e5ff30; color:var(--cyan); border:2px solid var(--cyan)">🎵 Music Lover</span>
+        <span class="tag" style="background:#ff4db830; color:var(--hot-pink); border:2px solid var(--hot-pink)">🌟 Super Smart</span>
+        <span class="tag" style="background:#c8f13530; color:var(--lime); border:2px solid var(--lime)">🫧 Bubbly (It's the salt)</span>
+      </div>
     </div>
-    <script src="/content/js/index.js"></script>
-  </body>
+  </div>
+  <div style="text-align:center; margin-top:2rem; font-size:1rem; color:rgba(255,255,255,0.4); font-style:italic;">
+    Favorite movie: 🌙 Slumberland &nbsp;|&nbsp; Fave music: 🎵 Parry Gripp
+  </div>
+</section>
+
+<!-- INTERESTS SECTION -->
+<section id="interests">
+  <div class="section-title" style="color:var(--hot-pink)">Poppy's Favorite Things</div>
+  <div class="interests-grid">
+    <div class="interest-card" style="background:linear-gradient(135deg,#1a3010,#0d2008); border-color:var(--lime)">
+      <span class="icon">🥒</span>
+      <h3 style="color:var(--lime)">Pickles</h3>
+      <p>The brinier the better. Salt queen energy.</p>
+    </div>
+    <div class="interest-card" style="background:linear-gradient(135deg,#0a2520,#051810); border-color:var(--teal)">
+      <span class="icon">🐢</span>
+      <h3 style="color:var(--teal)">Turtles</h3>
+      <p>Slow, wise, and absolutely iconic.</p>
+    </div>
+    <div class="interest-card" style="background:linear-gradient(135deg,#1a0835,#0d0520); border-color:var(--purple)">
+      <span class="icon">🎮</span>
+      <h3 style="color:var(--purple)">Roblox</h3>
+      <p>Building worlds and going on adventures.</p>
+    </div>
+    <div class="interest-card" style="background:linear-gradient(135deg,#301520,#200a15); border-color:var(--hot-pink)">
+      <span class="icon">🎨</span>
+      <h3 style="color:var(--hot-pink)">Art</h3>
+      <p>Creating masterpieces, one stroke at a time.</p>
+    </div>
+    <div class="interest-card" style="background:linear-gradient(135deg,#302010,#201508); border-color:var(--yellow)">
+      <span class="icon">🧩</span>
+      <h3 style="color:var(--yellow)">Puzzles</h3>
+      <p>The harder the better for this big brain.</p>
+    </div>
+    <div class="interest-card" style="background:linear-gradient(135deg,#301008,#200805); border-color:var(--orange)">
+      <span class="icon">📺</span>
+      <h3 style="color:var(--orange)">YouTube</h3>
+      <p>Watching everything. Knowing everything.</p>
+    </div>
+    <div class="interest-card" style="background:linear-gradient(135deg,#0a1a30,#051020); border-color:var(--cyan)">
+      <span class="icon">🌙</span>
+      <h3 style="color:var(--cyan)">Slumberland</h3>
+      <p>Her favorite movie. Dreams are real here.</p>
+    </div>
+    <div class="interest-card" style="background:linear-gradient(135deg,#1a0a30,#100520); border-color:var(--purple)">
+      <span class="icon">🎵</span>
+      <h3 style="color:var(--purple)">Parry Gripp</h3>
+      <p>The greatest songwriter of our generation.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TIC TAC TOE SECTION -->
+<section id="tictactoe">
+  <div class="section-title" style="color:var(--yellow)">🎮 Tic-Tac-Toe 🎮</div>
+  <div class="game-container">
+    <div class="vs-label">
+      <span class="player-badge" style="background:var(--hot-pink); color:white">🥒 Pickle (X)</span>
+      <span style="font-family:'Fredoka One',cursive; font-size:1.3rem; color:var(--yellow)">VS</span>
+      <span class="player-badge" style="background:var(--cyan); color:var(--navy)">🐢 Turtle (O)</span>
+    </div>
+
+    <div class="score-board">
+      <div class="score-item">
+        <div class="score-label">🥒 Pickle</div>
+        <div class="score-val" id="scoreX" style="color:var(--hot-pink)">0</div>
+      </div>
+      <div class="score-item">
+        <div class="score-label">🤝 Draws</div>
+        <div class="score-val" id="scoreD" style="color:var(--yellow)">0</div>
+      </div>
+      <div class="score-item">
+        <div class="score-label">🐢 Turtle</div>
+        <div class="score-val" id="scoreO" style="color:var(--cyan)">0</div>
+      </div>
+    </div>
+
+    <div class="game-status" id="gameStatus">Pickle goes first! 🥒</div>
+
+    <div class="ttt-board" id="tttBoard">
+      <div class="ttt-cell" onclick="tttMove(0)"></div>
+      <div class="ttt-cell" onclick="tttMove(1)"></div>
+      <div class="ttt-cell" onclick="tttMove(2)"></div>
+      <div class="ttt-cell" onclick="tttMove(3)"></div>
+      <div class="ttt-cell" onclick="tttMove(4)"></div>
+      <div class="ttt-cell" onclick="tttMove(5)"></div>
+      <div class="ttt-cell" onclick="tttMove(6)"></div>
+      <div class="ttt-cell" onclick="tttMove(7)"></div>
+      <div class="ttt-cell" onclick="tttMove(8)"></div>
+    </div>
+
+    <div style="margin-top:1.5rem; display:flex; flex-wrap:wrap; gap:0.5rem; justify-content:center">
+      <button class="game-btn btn-cyan" onclick="tttModeToggle()" id="modeBtn">🤖 vs Computer</button>
+      <button class="game-btn btn-pink" onclick="tttReset()">🔄 New Game</button>
+      <button class="game-btn btn-lime" onclick="tttResetScores()">🧹 Reset Scores</button>
+    </div>
+    <div id="modeLabel" style="color:rgba(255,255,255,0.4); font-size:0.9rem; margin-top:0.5rem">Mode: 2 Players</div>
+  </div>
+</section>
+
+<!-- PICKLE GARDEN -->
+<section id="pickles">
+  <div class="section-title" style="color:var(--lime)">🥒 Poppy's Pickle Garden 🥒</div>
+  <p style="text-align:center; color:rgba(255,255,255,0.6); margin-bottom:1.5rem">
+    Click anywhere in the garden to grow pickles! 🌱
+  </p>
+  <div class="pickle-garden" id="pickleGarden" onclick="growPickle(event)">
+    <div class="garden-title">🌿 The Sacred Pickle Patch 🌿</div>
+    <div class="pickle-canvas" id="pickleCanvas"></div>
+  </div>
+  <div class="garden-count" id="gardenCount">0 pickles growing!</div>
+  <div class="garden-hint">Click the garden to grow more! Right-click a pickle to harvest it.</div>
+  <div style="text-align:center; margin-top:1rem">
+    <button class="game-btn btn-lime" onclick="clearGarden()">🌾 Harvest All</button>
+    <button class="game-btn btn-cyan" onclick="growBunch()">🥒🥒🥒 Grow a Bunch!</button>
+  </div>
+</section>
+
+<!-- TURTLE SQUAD -->
+<section id="turtles">
+  <div class="section-title" style="color:var(--teal)">🐢 The Turtle Squad 🐢</div>
+  <p style="text-align:center; color:rgba(255,255,255,0.6); margin-bottom:1rem">
+    Hover to say hi! Click to get a turtle fact!
+  </p>
+  <div class="turtle-row" id="turtleRow"></div>
+  <div id="turtleFact" style="text-align:center; margin-top:1.5rem; font-size:1.1rem; color:var(--teal); min-height:2rem; font-weight:700; transition:all 0.3s;"></div>
+  <div style="text-align:center; margin-top:1rem">
+    <button class="game-btn btn-cyan" onclick="addTurtle()">➕ Add a Turtle</button>
+    <button class="game-btn btn-lime" onclick="paradeMode()" id="paradeBtn">🎉 Turtle Parade!</button>
+  </div>
+</section>
+
+<footer>
+  Made with 💚 for <span>Poppy</span> — the coolest pickle-loving, turtle-adoring, Roblox-playing artist in the whole universe 🌙✨
+</footer>
+
+<script>
+// ===== BG SHAPES =====
+const bgS = document.getElementById('bgShapes');
+['#ff4db8','#00e5ff','#c8f135','#b44dff','#ff7c1e'].forEach((c,i) => {
+  const d = document.createElement('div');
+  d.className = 'bg-shape';
+  d.style.cssText = `width:${200+i*80}px;height:${200+i*80}px;background:${c};
+    left:${i*20}%;top:${i*15+10}%;animation-delay:${i*2}s;animation-duration:${10+i*3}s`;
+  bgS.appendChild(d);
+});
+
+// ===== STARS =====
+const hs = document.getElementById('heroStars');
+for(let i=0;i<60;i++){
+  const s = document.createElement('div');
+  s.className = 'star';
+  const sz = Math.random()*3+1;
+  s.style.cssText = `width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;
+    animation-delay:${Math.random()*3}s;animation-duration:${1.5+Math.random()*2}s`;
+  hs.appendChild(s);
+}
+
+// ===== NAV =====
+function showSection(id) {
+  document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ===== TIC TAC TOE =====
+let board = Array(9).fill(''), currentPlayer = 'X', gameOver = false;
+let scores = {X:0,O:0,D:0}, vsComputer = false;
+const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+
+function tttMove(i) {
+  if(gameOver || board[i]) return;
+  placeMove(i, currentPlayer);
+  if(!gameOver && vsComputer && currentPlayer==='O') {
+    setTimeout(()=>{ if(!gameOver) placeMove(computerMove(),'O'); }, 400);
+  }
+}
+
+function placeMove(i, p) {
+  board[i] = p;
+  const cells = document.querySelectorAll('.ttt-cell');
+  cells[i].textContent = p === 'X' ? '🥒' : '🐢';
+  cells[i].classList.add('taken', p.toLowerCase());
+  const win = checkWin(p);
+  if(win) {
+    win.forEach(j => cells[j].classList.add('winner'));
+    scores[p]++; updateScores();
+    document.getElementById('gameStatus').textContent = p==='X' ? '🥒 Pickle wins! Salty victory!' : '🐢 Turtle wins! Shell yeah!';
+    gameOver = true;
+    launchConfetti();
+    return;
+  }
+  if(board.every(c=>c)) {
+    document.getElementById('gameStatus').textContent = "🤝 It's a draw! Both are legends.";
+    scores.D++; updateScores(); gameOver = true; return;
+  }
+  currentPlayer = currentPlayer==='X'?'O':'X';
+  document.getElementById('gameStatus').textContent = currentPlayer==='X' ? '🥒 Pickle\'s turn!' : '🐢 Turtle\'s turn!';
+}
+
+function computerMove() {
+  // Try to win or block
+  for(let p of ['O','X']) {
+    for(let combo of wins) {
+      const [a,b,c] = combo;
+      const vals = [board[a],board[b],board[c]];
+      if(vals.filter(v=>v===p).length===2 && vals.includes('')) {
+        return combo[vals.indexOf('')];
+      }
+    }
+  }
+  if(!board[4]) return 4; // center
+  const corners = [0,2,6,8].filter(i=>!board[i]);
+  if(corners.length) return corners[Math.floor(Math.random()*corners.length)];
+  return board.findIndex(c=>!c);
+}
+
+function checkWin(p) {
+  for(let combo of wins) {
+    if(combo.every(i=>board[i]===p)) return combo;
+  }
+  return null;
+}
+
+function updateScores() {
+  document.getElementById('scoreX').textContent = scores.X;
+  document.getElementById('scoreO').textContent = scores.O;
+  document.getElementById('scoreD').textContent = scores.D;
+}
+
+function tttReset() {
+  board = Array(9).fill(''); currentPlayer = 'X'; gameOver = false;
+  document.querySelectorAll('.ttt-cell').forEach(c => {
+    c.textContent=''; c.classList.remove('taken','x','o','winner');
+  });
+  document.getElementById('gameStatus').textContent = 'Pickle goes first! 🥒';
+}
+
+function tttResetScores() { scores={X:0,O:0,D:0}; updateScores(); tttReset(); }
+
+function tttModeToggle() {
+  vsComputer = !vsComputer;
+  document.getElementById('modeBtn').textContent = vsComputer ? '👥 2 Players' : '🤖 vs Computer';
+  document.getElementById('modeLabel').textContent = vsComputer ? 'Mode: vs Computer (you are 🥒)' : 'Mode: 2 Players';
+  tttReset();
+}
+
+// ===== CONFETTI =====
+function launchConfetti() {
+  const colors = ['#ff4db8','#00e5ff','#c8f135','#b44dff','#ffe94d','#ff7c1e'];
+  for(let i=0;i<60;i++) {
+    const c = document.createElement('div');
+    c.className = 'confetti-piece';
+    c.style.cssText = `left:${Math.random()*100}vw;background:${colors[Math.floor(Math.random()*colors.length)]};
+      animation-duration:${1+Math.random()*2}s;animation-delay:${Math.random()*0.5}s;
+      border-radius:${Math.random()>0.5?'50%':'2px'};transform:rotate(${Math.random()*360}deg)`;
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(), 3000);
+  }
+}
+
+// ===== PICKLE GARDEN =====
+let pickleCount = 0;
+const pickleEmojis = ['🥒','🥒','🥒','🫙','🌿','🥒','🥒'];
+
+function growPickle(e) {
+  if(e.target.closest('.game-btn')) return;
+  const canvas = document.getElementById('pickleCanvas');
+  const rect = canvas.getBoundingClientRect();
+  const x = Math.max(5, Math.min(90, ((e.clientX - rect.left)/rect.width)*100));
+  const y = Math.max(5, Math.min(80, ((e.clientY - rect.top)/rect.height)*100));
+  addPickleAt(x, y);
+}
+
+function addPickleAt(x, y) {
+  const canvas = document.getElementById('pickleCanvas');
+  const p = document.createElement('div');
+  p.className = 'pickle';
+  p.textContent = pickleEmojis[Math.floor(Math.random()*pickleEmojis.length)];
+  const rot = (Math.random()-0.5)*30;
+  const scale = 0.8 + Math.random()*0.8;
+  p.style.cssText = `left:${x}%;top:${y}%;transform:rotate(${rot}deg) scale(${scale});font-size:${1.5+Math.random()}rem`;
+  p.title = 'Right-click to harvest!';
+  p.addEventListener('contextmenu', e => { e.preventDefault(); p.remove(); pickleCount--; updatePickleCount(); });
+  canvas.appendChild(p);
+  pickleCount++;
+  updatePickleCount();
+}
+
+function updatePickleCount() {
+  const msgs = ['pickles growing!','pickles in the patch!','pickles! So many pickles!','MAXIMUM PICKLE POWER!'];
+  const i = Math.min(3, Math.floor(pickleCount/5));
+  document.getElementById('gardenCount').textContent = `${pickleCount} ${msgs[i]}`;
+}
+
+function clearGarden() {
+  document.getElementById('pickleCanvas').innerHTML = '';
+  pickleCount = 0; updatePickleCount();
+}
+
+function growBunch() {
+  for(let i=0;i<8;i++) {
+    setTimeout(()=>addPickleAt(10+Math.random()*80, 10+Math.random()*80), i*100);
+  }
+}
+
+// ===== TURTLE SQUAD =====
+const turtleNames = ['Sheldon','Speedy','Turbo','Bubbles','Jade','Chip','Cosmo','Dory','Pablo','Luna'];
+const turtleFacts = [
+  'Sea turtles can live over 100 years!',
+  'Turtles existed before dinosaurs — 220 million years ago!',
+  'A group of turtles is called a "bale"!',
+  'Turtles can breathe through their butts in winter!',
+  'Leatherback turtles can weigh over 2,000 lbs!',
+  'Turtles taste with their nose!',
+  'Baby turtles are called hatchlings!',
+  'Sea turtles return to the exact beach where they were born!',
+  'Turtles have been to space — in 1968!',
+  'The turtle shell has over 60 bones inside it!',
+];
+let myTurtles = [];
+
+function initTurtles() {
+  myTurtles = turtleNames.slice(0,6).map(n => ({name:n, emoji:'🐢', fact: turtleFacts[Math.floor(Math.random()*turtleFacts.length)]}));
+  renderTurtles();
+}
+
+function renderTurtles() {
+  const row = document.getElementById('turtleRow');
+  row.innerHTML = '';
+  myTurtles.forEach((t,i) => {
+    const card = document.createElement('div');
+    card.className = 'turtle-card';
+    card.innerHTML = `<div class="turtle-emoji">${t.emoji}</div><div class="turtle-name">${t.name}</div>`;
+    card.onclick = () => {
+      document.getElementById('turtleFact').textContent = `🐢 ${t.name} says: "${t.fact}"`;
+    };
+    row.appendChild(card);
+  });
+}
+
+function addTurtle() {
+  if(myTurtles.length >= 12) { document.getElementById('turtleFact').textContent = "The squad is full! 🐢🐢🐢"; return; }
+  const idx = myTurtles.length;
+  const name = turtleNames[idx] || `Turtle #${idx+1}`;
+  myTurtles.push({name, emoji:'🐢', fact: turtleFacts[Math.floor(Math.random()*turtleFacts.length)]});
+  renderTurtles();
+}
+
+let parading = false, paradeInterval;
+function paradeMode() {
+  parading = !parading;
+  document.getElementById('paradeBtn').textContent = parading ? '🛑 Stop Parade' : '🎉 Turtle Parade!';
+  if(parading) {
+    paradeInterval = setInterval(() => {
+      document.querySelectorAll('.turtle-card').forEach((c,i) => {
+        setTimeout(() => { c.style.transform = 'scale(1.2) rotate(10deg)'; setTimeout(()=>c.style.transform='',200); }, i*100);
+      });
+    }, 1200);
+  } else {
+    clearInterval(paradeInterval);
+    document.querySelectorAll('.turtle-card').forEach(c=>c.style.transform='');
+  }
+}
+
+initTurtles();
+</script>
+</body>
 </html>
