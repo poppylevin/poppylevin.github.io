@@ -407,6 +407,102 @@
     .ttt-cell { width: 75px; height: 75px; font-size: 2.2rem; }
     .bouncing-items { gap: 1rem; }
   }
+
+  /* ===== ARCADE HUB ===== */
+  .arcade-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+    gap: 1.2rem; margin-top: 0.5rem;
+  }
+  .arcade-badge {
+    border-radius: 20px; padding: 2rem 1rem;
+    text-align: center; cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 3px solid transparent; position: relative; overflow: hidden;
+  }
+  .arcade-badge:hover {
+    transform: translateY(-8px) scale(1.04);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.55);
+  }
+  .arcade-badge .ab-icon { font-size: 3.5rem; display: block; margin-bottom: 0.7rem; }
+  .arcade-badge .ab-name {
+    font-family: 'Fredoka One', cursive; font-size: 1.25rem; margin-bottom: 0.3rem;
+  }
+  .arcade-badge .ab-desc { font-size: 0.8rem; opacity: 0.75; line-height: 1.4; }
+  .arcade-badge .ab-new {
+    position: absolute; top: 0.65rem; right: 0.8rem;
+    background: var(--hot-pink); color: white;
+    font-family: 'Fredoka One', cursive; font-size: 0.7rem;
+    padding: 0.15rem 0.55rem; border-radius: 50px;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  /* ===== WORD SEARCH ===== */
+  .ws-puzzle-picker {
+    display: flex; flex-wrap: wrap; gap: 0.45rem;
+    justify-content: center; margin-bottom: 1.5rem;
+  }
+  .ws-puzzle-btn {
+    font-family: 'Fredoka One', cursive;
+    padding: 0.35rem 0.9rem; border-radius: 50px;
+    border: 2px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.05); color: white;
+    cursor: pointer; font-size: 0.85rem; transition: all 0.2s;
+  }
+  .ws-puzzle-btn:hover { border-color: rgba(255,255,255,0.35); background: rgba(255,255,255,0.1); }
+  .ws-puzzle-btn.ws-active { background: var(--purple); border-color: var(--purple); }
+  .ws-area {
+    display: flex; gap: 2rem; flex-wrap: wrap;
+    justify-content: center; align-items: flex-start;
+  }
+  .ws-grid-wrap {
+    background: rgba(255,255,255,0.02);
+    border: 3px solid rgba(180,77,255,0.4); border-radius: 16px;
+    padding: 1rem; user-select: none; touch-action: none;
+  }
+  .ws-grid { display: inline-grid; gap: 2px; }
+  .ws-cell {
+    width: 30px; height: 30px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fredoka One', cursive; font-size: 0.9rem;
+    border-radius: 5px; cursor: pointer;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.06);
+    transition: background 0.1s;
+    color: rgba(255,255,255,0.85);
+  }
+  .ws-cell:hover { background: rgba(255,255,255,0.11); }
+  .ws-cell.ws-selecting { background: rgba(255,228,0,0.3) !important; border-color: rgba(255,228,0,0.7) !important; color: white !important; }
+  .ws-cell.ws-found { cursor: default; font-weight: bold; }
+  .ws-words { min-width: 155px; }
+  .ws-words-title {
+    font-family: 'Fredoka One', cursive; font-size: 1rem;
+    margin-bottom: 0.7rem; color: rgba(255,255,255,0.5);
+  }
+  .ws-word-item {
+    font-family: 'Fredoka One', cursive; font-size: 0.95rem;
+    padding: 0.3rem 0.8rem; margin: 0.25rem 0;
+    border-radius: 8px; border: 2px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.04); transition: all 0.4s;
+  }
+  .ws-word-item.ws-word-found { text-decoration: line-through; opacity: 0.7; }
+  .ws-status {
+    text-align: center; font-family: 'Fredoka One', cursive;
+    font-size: 1.3rem; color: var(--yellow);
+    min-height: 2rem; margin-top: 1rem;
+  }
+  .ws-progress {
+    text-align: center; color: rgba(255,255,255,0.4);
+    font-size: 0.9rem; margin-top: 0.4rem;
+    font-family: 'Fredoka One', cursive;
+  }
+  @media (max-width: 600px) {
+    .ws-cell { width: 26px; height: 26px; font-size: 0.75rem; }
+    .ws-grid-wrap { padding: 0.6rem; }
+  }
+  @media (max-width: 420px) {
+    .ws-cell { width: 22px; height: 22px; font-size: 0.65rem; }
+  }
 </style>
 </head>
 <body>
@@ -431,12 +527,14 @@
 
 <!-- NAV -->
 <nav>
-  <button class="nav-btn active" onclick="showSection('about')">🌟 About</button>
-  <button class="nav-btn" onclick="showSection('interests')">🎯 Interests</button>
-  <button class="nav-btn" onclick="showSection('tictactoe')">🎮 Tic-Tac-Toe</button>
-  <button class="nav-btn" onclick="showSection('pickles')">🥒 Pickle Garden</button>
-  <button class="nav-btn" onclick="showSection('turtles')">🐢 Turtle Squad</button>
-  <button class="nav-btn" onclick="showSection('dadjokes')">😂 Dad Jokes</button>
+  <button class="nav-btn active" data-target="about" onclick="showSection('about')">🌟 About</button>
+  <button class="nav-btn" data-target="interests" onclick="showSection('interests')">🎯 Interests</button>
+  <button class="nav-btn" data-target="arcade" onclick="showSection('arcade')">🕹️ Arcade</button>
+  <button class="nav-btn" data-target="tictactoe" onclick="showSection('tictactoe')">🎮 Tic-Tac-Toe</button>
+  <button class="nav-btn" data-target="wordsearch" onclick="showSection('wordsearch')">🔤 Word Search</button>
+  <button class="nav-btn" data-target="pickles" onclick="showSection('pickles')">🥒 Pickle Garden</button>
+  <button class="nav-btn" data-target="turtles" onclick="showSection('turtles')">🐢 Turtle Squad</button>
+  <button class="nav-btn" data-target="dadjokes" onclick="showSection('dadjokes')">😂 Dad Jokes</button>
 </nav>
 
 <!-- ABOUT SECTION -->
@@ -515,6 +613,42 @@
   </div>
 </section>
 
+<!-- ARCADE HUB -->
+<section id="arcade">
+  <div class="section-title" style="background:linear-gradient(90deg,var(--purple),var(--hot-pink),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">
+    🕹️ Arcade
+  </div>
+  <p style="text-align:center;color:rgba(255,255,255,0.5);margin-bottom:2rem">Pick a game and play!</p>
+  <div class="arcade-grid">
+    <div class="arcade-badge" style="background:linear-gradient(135deg,#1e0a38,#100220);border-color:var(--yellow)" onclick="showSection('tictactoe')">
+      <span class="ab-icon">🎮</span>
+      <div class="ab-name" style="color:var(--yellow)">Tic-Tac-Toe</div>
+      <div class="ab-desc">🥒 Pickle vs 🐢 Turtle<br>2-player or vs AI</div>
+    </div>
+    <div class="arcade-badge" style="background:linear-gradient(135deg,#05102a,#020816);border-color:var(--cyan)" onclick="showSection('wordsearch')">
+      <span class="ab-icon">🔤</span>
+      <div class="ab-name" style="color:var(--cyan)">Word Search</div>
+      <div class="ab-desc">10 themed puzzles<br>Find the hidden words!</div>
+      <div class="ab-new">NEW!</div>
+    </div>
+    <div class="arcade-badge" style="background:linear-gradient(135deg,#0a2010,#051008);border-color:var(--lime)" onclick="showSection('pickles')">
+      <span class="ab-icon">🥒</span>
+      <div class="ab-name" style="color:var(--lime)">Pickle Garden</div>
+      <div class="ab-desc">Click to grow pickles<br>Right-click to harvest!</div>
+    </div>
+    <div class="arcade-badge" style="background:linear-gradient(135deg,#051a18,#020e0c);border-color:var(--teal)" onclick="showSection('turtles')">
+      <span class="ab-icon">🐢</span>
+      <div class="ab-name" style="color:var(--teal)">Turtle Squad</div>
+      <div class="ab-desc">Meet the crew<br>Learn turtle facts!</div>
+    </div>
+    <div class="arcade-badge" style="background:linear-gradient(135deg,#2a1500,#180d00);border-color:var(--orange)" onclick="showSection('dadjokes')">
+      <span class="ab-icon">😂</span>
+      <div class="ab-name" style="color:var(--orange)">Dad Jokes</div>
+      <div class="ab-desc">23 terrible jokes<br>Rate them all!</div>
+    </div>
+  </div>
+</section>
+
 <!-- TIC TAC TOE SECTION -->
 <section id="tictactoe">
   <div class="section-title" style="color:var(--yellow)">🎮 Tic-Tac-Toe 🎮</div>
@@ -560,6 +694,27 @@
       <button class="game-btn btn-lime" onclick="tttResetScores()">🧹 Reset Scores</button>
     </div>
     <div id="modeLabel" style="color:rgba(255,255,255,0.4); font-size:0.9rem; margin-top:0.5rem">Mode: 2 Players</div>
+  </div>
+</section>
+
+<!-- WORD SEARCH -->
+<section id="wordsearch">
+  <div class="section-title" style="color:var(--cyan)">🔤 Word Search 🔤</div>
+  <p style="text-align:center;color:rgba(255,255,255,0.5);margin-bottom:1rem">
+    Find all the hidden words! Click and drag to select — any direction works.
+  </p>
+  <div class="ws-puzzle-picker" id="wsPuzzlePicker"></div>
+  <div class="ws-area">
+    <div class="ws-grid-wrap">
+      <div class="ws-grid" id="wsGrid"></div>
+    </div>
+    <div class="ws-words" id="wsWords"></div>
+  </div>
+  <div class="ws-progress" id="wsProgress"></div>
+  <div class="ws-status" id="wsStatus"></div>
+  <div style="text-align:center;margin-top:1rem">
+    <button class="game-btn btn-cyan" onclick="wsLoad(wsCurPuzzle)">🔀 New Board</button>
+    <button class="game-btn btn-pink" onclick="showSection('arcade')">🕹️ Back to Arcade</button>
   </div>
 </section>
 
@@ -673,7 +828,8 @@ function showSection(id) {
   document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  event.target.classList.add('active');
+  const btn = document.querySelector(`.nav-btn[data-target="${id}"]`);
+  if (btn) btn.classList.add('active');
 }
 
 // ===== TIC TAC TOE =====
@@ -950,6 +1106,204 @@ function updateJokeMeter() {
 }
 
 loadJoke(0);
+
+// ===== WORD SEARCH =====
+const WS_SIZE = 12;
+const WS_DIRS = [[0,1],[1,0],[1,1],[1,-1],[0,-1],[-1,0],[-1,-1],[-1,1]];
+const WS_PALETTE = [
+  ['rgba(0,212,170,0.4)','rgba(0,212,170,0.9)','#00d4aa'],
+  ['rgba(180,77,255,0.4)','rgba(180,77,255,0.9)','#c084fc'],
+  ['rgba(255,77,184,0.4)','rgba(255,77,184,0.9)','#ff4db8'],
+  ['rgba(0,229,255,0.4)','rgba(0,229,255,0.9)','#00e5ff'],
+  ['rgba(255,228,77,0.4)','rgba(255,228,77,0.9)','#ffe94d'],
+  ['rgba(200,241,53,0.4)','rgba(200,241,53,0.9)','#c8f135'],
+  ['rgba(255,124,30,0.4)','rgba(255,124,30,0.9)','#ff7c1e'],
+  ['rgba(255,180,100,0.4)','rgba(255,180,100,0.9)','#ffb464'],
+  ['rgba(100,200,255,0.4)','rgba(100,200,255,0.9)','#64c8ff'],
+];
+const wsPuzzles = [
+  {name:"🥒 Pickles",    words:["PICKLE","BRINE","DILL","SALTY","JAR","CRUNCH","VINEGAR","GHERKIN"]},
+  {name:"🐢 Turtles",    words:["TURTLE","SHELL","SWIM","HATCH","OCEAN","CORAL","SLOW","REEF"]},
+  {name:"🎮 Gaming",     words:["ROBLOX","LEVEL","QUEST","SCORE","PIXEL","JUMP","BONUS","LOOT"]},
+  {name:"🌈 Colors",     words:["RED","ORANGE","YELLOW","GREEN","BLUE","PURPLE","PINK","CYAN"]},
+  {name:"🍕 Yummy Food", words:["PIZZA","TACO","SUSHI","PASTA","WAFFLE","COOKIE","CANDY","MANGO"]},
+  {name:"🦁 Animals",    words:["LION","TIGER","PANDA","KOALA","ZEBRA","EAGLE","HIPPO","WOLF"]},
+  {name:"🌙 Dreams",     words:["DREAM","SLEEP","MOON","STAR","CLOUD","NIGHT","MAGIC","COZY"]},
+  {name:"🎵 Music",      words:["MUSIC","PIANO","GUITAR","DRUMS","SING","DANCE","BEAT","MELODY"]},
+  {name:"🌺 Nature",     words:["FLOWER","TREE","RIVER","MEADOW","BREEZE","LEAF","BEE","PETAL"]},
+  {name:"🚀 Space",      words:["PLANET","ROCKET","STAR","MOON","COMET","GALAXY","ORBIT","NEBULA"]},
+];
+
+let wsGrid = [], wsFoundWords = [], wsCurPuzzle = 0, wsFoundCells = new Set();
+let wsIsDragging = false, wsStartR = -1, wsStartC = -1;
+
+function wsGenGrid(words) {
+  const grid = Array.from({length: WS_SIZE}, () => Array(WS_SIZE).fill(''));
+  for (const word of words) {
+    let placed = false;
+    for (let attempt = 0; attempt < 200 && !placed; attempt++) {
+      const [dr, dc] = WS_DIRS[Math.floor(Math.random() * WS_DIRS.length)];
+      let rMin = 0, rMax = WS_SIZE - 1, cMin = 0, cMax = WS_SIZE - 1;
+      if (dr > 0) rMax = WS_SIZE - word.length;
+      if (dr < 0) rMin = word.length - 1;
+      if (dc > 0) cMax = WS_SIZE - word.length;
+      if (dc < 0) cMin = word.length - 1;
+      if (rMax < rMin || cMax < cMin) continue;
+      const r = rMin + Math.floor(Math.random() * (rMax - rMin + 1));
+      const c = cMin + Math.floor(Math.random() * (cMax - cMin + 1));
+      let ok = true;
+      for (let i = 0; i < word.length; i++) {
+        const nr = r + dr * i, nc = c + dc * i;
+        if (grid[nr][nc] !== '' && grid[nr][nc] !== word[i]) { ok = false; break; }
+      }
+      if (ok) {
+        for (let i = 0; i < word.length; i++) grid[r + dr * i][c + dc * i] = word[i];
+        placed = true;
+      }
+    }
+  }
+  const alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  for (let r = 0; r < WS_SIZE; r++)
+    for (let c = 0; c < WS_SIZE; c++)
+      if (!grid[r][c]) grid[r][c] = alpha[Math.floor(Math.random() * 26)];
+  return grid;
+}
+
+function wsLoad(idx) {
+  wsCurPuzzle = idx;
+  wsFoundWords = [];
+  wsFoundCells = new Set();
+  wsIsDragging = false;
+  const puzzle = wsPuzzles[idx];
+  wsGrid = wsGenGrid(puzzle.words);
+  document.querySelectorAll('.ws-puzzle-btn').forEach((b, i) => b.classList.toggle('ws-active', i === idx));
+  const gridEl = document.getElementById('wsGrid');
+  gridEl.style.gridTemplateColumns = `repeat(${WS_SIZE}, 30px)`;
+  gridEl.innerHTML = '';
+  for (let r = 0; r < WS_SIZE; r++) {
+    for (let c = 0; c < WS_SIZE; c++) {
+      const cell = document.createElement('div');
+      cell.className = 'ws-cell';
+      cell.textContent = wsGrid[r][c];
+      cell.dataset.r = r;
+      cell.dataset.c = c;
+      gridEl.appendChild(cell);
+    }
+  }
+  const wordsEl = document.getElementById('wsWords');
+  wordsEl.innerHTML = '<div class="ws-words-title">Find these words:</div>';
+  puzzle.words.forEach(w => {
+    const div = document.createElement('div');
+    div.className = 'ws-word-item';
+    div.id = 'wsw_' + w;
+    div.textContent = w;
+    wordsEl.appendChild(div);
+  });
+  document.getElementById('wsStatus').textContent = '';
+  document.getElementById('wsProgress').textContent = `0 / ${puzzle.words.length} words found`;
+}
+
+function wsOnDown(e) {
+  e.preventDefault();
+  const cell = e.target.closest('.ws-cell');
+  if (!cell) return;
+  wsIsDragging = true;
+  wsStartR = +cell.dataset.r;
+  wsStartC = +cell.dataset.c;
+  wsHighlight(wsStartR, wsStartC, wsStartR, wsStartC);
+  document.getElementById('wsGrid').setPointerCapture(e.pointerId);
+}
+
+function wsOnMove(e) {
+  if (!wsIsDragging) return;
+  const under = document.elementFromPoint(e.clientX, e.clientY);
+  if (!under || !under.classList.contains('ws-cell')) return;
+  wsHighlight(wsStartR, wsStartC, +under.dataset.r, +under.dataset.c);
+}
+
+function wsCellPath(r1, c1, r2, c2) {
+  const dr = r2 - r1, dc = c2 - c1;
+  const len = Math.max(Math.abs(dr), Math.abs(dc));
+  if (len === 0) return [{r:r1,c:c1}];
+  if (dr !== 0 && dc !== 0 && Math.abs(dr) !== Math.abs(dc)) return [];
+  const sr = dr === 0 ? 0 : dr / Math.abs(dr);
+  const sc = dc === 0 ? 0 : dc / Math.abs(dc);
+  return Array.from({length: len + 1}, (_, i) => ({r: r1 + sr * i, c: c1 + sc * i}));
+}
+
+function wsHighlight(r1, c1, r2, c2) {
+  document.querySelectorAll('#wsGrid .ws-cell.ws-selecting').forEach(c => c.classList.remove('ws-selecting'));
+  wsCellPath(r1, c1, r2, c2).forEach(({r, c}) => {
+    const cell = document.querySelector(`#wsGrid .ws-cell[data-r="${r}"][data-c="${c}"]`);
+    if (cell && !cell.classList.contains('ws-found')) cell.classList.add('ws-selecting');
+  });
+}
+
+function wsCheck(r1, c1, r2, c2) {
+  const cells = wsCellPath(r1, c1, r2, c2);
+  if (cells.length < 2) return;
+  const word = cells.map(({r,c}) => wsGrid[r][c]).join('');
+  const wordRev = word.split('').reverse().join('');
+  const puzzle = wsPuzzles[wsCurPuzzle];
+  const match = puzzle.words.find(w => (w === word || w === wordRev) && !wsFoundWords.includes(w));
+  if (!match) return;
+  const pal = WS_PALETTE[wsFoundWords.length % WS_PALETTE.length];
+  wsFoundWords.push(match);
+  cells.forEach(({r, c}) => {
+    const cell = document.querySelector(`#wsGrid .ws-cell[data-r="${r}"][data-c="${c}"]`);
+    if (!cell) return;
+    cell.classList.remove('ws-selecting');
+    cell.classList.add('ws-found');
+    cell.style.background = pal[0];
+    cell.style.borderColor = pal[1];
+    cell.style.color = pal[2];
+    wsFoundCells.add(`${r},${c}`);
+  });
+  const wordEl = document.getElementById('wsw_' + match);
+  if (wordEl) {
+    wordEl.classList.add('ws-word-found');
+    wordEl.style.background = pal[0];
+    wordEl.style.borderColor = pal[1];
+    wordEl.style.color = pal[2];
+  }
+  document.getElementById('wsProgress').textContent = `${wsFoundWords.length} / ${puzzle.words.length} words found`;
+  if (wsFoundWords.length === puzzle.words.length) {
+    document.getElementById('wsStatus').textContent = '🎉 You found all the words! Amazing!';
+    launchConfetti();
+  } else {
+    document.getElementById('wsStatus').textContent = `✅ Found: ${match}!`;
+    setTimeout(() => {
+      const el = document.getElementById('wsStatus');
+      if (el && el.textContent.startsWith('✅')) el.textContent = '';
+    }, 1800);
+  }
+}
+
+// Build puzzle picker buttons once
+const wsPicker = document.getElementById('wsPuzzlePicker');
+wsPuzzles.forEach((p, i) => {
+  const btn = document.createElement('button');
+  btn.className = 'ws-puzzle-btn' + (i === 0 ? ' ws-active' : '');
+  btn.textContent = p.name;
+  btn.onclick = () => wsLoad(i);
+  wsPicker.appendChild(btn);
+});
+wsLoad(0);
+
+// Word search pointer events (set up once)
+document.getElementById('wsGrid').addEventListener('pointerdown', wsOnDown);
+document.getElementById('wsGrid').addEventListener('pointermove', wsOnMove);
+document.addEventListener('pointerup', function(e) {
+  if (!wsIsDragging) return;
+  wsIsDragging = false;
+  const under = document.elementFromPoint(e.clientX, e.clientY);
+  let endR = wsStartR, endC = wsStartC;
+  if (under && under.classList.contains('ws-cell')) {
+    endR = +under.dataset.r; endC = +under.dataset.c;
+  }
+  wsCheck(wsStartR, wsStartC, endR, endC);
+  document.querySelectorAll('#wsGrid .ws-cell.ws-selecting').forEach(c => c.classList.remove('ws-selecting'));
+});
 </script>
 </body>
 </html>
