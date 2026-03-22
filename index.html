@@ -513,6 +513,83 @@
   #pdCanvas { display: block; width: 100%; height: auto; cursor: pointer; }
   .pd-jump-btn { display: none; }
   @media (max-width: 600px) { .pd-jump-btn { display: inline-block !important; } }
+
+  /* ===== MEMORY MATCH ===== */
+  .mm-grid {
+    display: grid; gap: 0.6rem; justify-content: center; margin: 0 auto;
+  }
+  .mm-card {
+    width: 80px; height: 80px; border-radius: 12px;
+    cursor: pointer; position: relative;
+    transform-style: preserve-3d; transition: transform 0.4s;
+    user-select: none;
+  }
+  .mm-card.flipped, .mm-card.matched { transform: rotateY(180deg); }
+  .mm-card.matched { cursor: default; }
+  .mm-front, .mm-back {
+    position: absolute; inset: 0; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    backface-visibility: hidden; font-size: 2.2rem;
+  }
+  .mm-front {
+    background: linear-gradient(135deg, #1e0a38, #0d0520);
+    border: 3px solid var(--purple);
+    font-family: 'Fredoka One', cursive; font-size: 1.4rem; color: var(--purple);
+  }
+  .mm-back {
+    background: linear-gradient(135deg, #0d2040, #1e1040);
+    border: 3px solid var(--cyan); transform: rotateY(180deg);
+  }
+  .mm-card.matched .mm-back {
+    background: linear-gradient(135deg, #0a2515, #051a0d);
+    border-color: var(--lime); box-shadow: 0 0 12px rgba(200,241,53,0.3);
+  }
+  .mm-stats { display: flex; justify-content: center; gap: 2rem; margin: 1rem 0; }
+  .mm-stat { text-align: center; }
+  .mm-stat-val { font-family: 'Fredoka One', cursive; font-size: 2rem; color: var(--cyan); }
+  .mm-stat-label { font-size: 0.8rem; opacity: 0.5; }
+  .mm-difficulty { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1.2rem; }
+  .mm-diff-btn {
+    font-family: 'Fredoka One', cursive; padding: 0.3rem 1rem; border-radius: 50px;
+    border: 2px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.05);
+    color: white; cursor: pointer; font-size: 0.9rem; transition: all 0.2s;
+  }
+  .mm-diff-btn:hover, .mm-diff-btn.mm-active { background: var(--purple); border-color: var(--purple); }
+  @media (max-width: 480px) { .mm-card { width: 65px; height: 65px; } }
+
+  /* ===== PICKLE CATCHER ===== */
+  .pc-canvas-wrap {
+    border-radius: 16px; overflow: hidden;
+    border: 3px solid var(--hot-pink);
+    box-shadow: 0 0 30px rgba(255,77,184,0.2);
+  }
+  #pcCanvas { display: block; width: 100%; height: auto; cursor: none; }
+
+  /* ===== SLIDING PUZZLE ===== */
+  .sp-board {
+    display: inline-grid; gap: 4px; padding: 8px;
+    background: rgba(255,255,255,0.04);
+    border: 3px solid var(--orange); border-radius: 16px;
+  }
+  .sp-tile {
+    width: 90px; height: 90px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.3rem; cursor: pointer;
+    background: linear-gradient(135deg, #1e0a38, #0d0520);
+    border: 2px solid rgba(180,77,255,0.3);
+    transition: transform 0.12s, background 0.15s;
+    user-select: none;
+  }
+  .sp-tile:hover:not(.sp-empty) { transform: scale(1.04); border-color: var(--purple); }
+  .sp-tile.sp-empty { background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.05); cursor: default; }
+  .sp-tile.sp-solved {
+    background: linear-gradient(135deg, #0a2515, #051a0d);
+    border-color: var(--lime); box-shadow: 0 0 8px rgba(200,241,53,0.25);
+  }
+  .sp-wrap { display: flex; flex-direction: column; align-items: center; }
+  .sp-moves { font-family: 'Fredoka One', cursive; font-size: 1.1rem; color: var(--orange); margin-bottom: 0.8rem; }
+  @media (max-width: 480px) { .sp-tile { width: 72px; height: 72px; font-size: 1.8rem; } }
+  @media (max-width: 360px) { .sp-tile { width: 60px; height: 60px; font-size: 1.5rem; } }
 </style>
 </head>
 <body>
@@ -543,6 +620,9 @@
   <button class="nav-btn" data-target="tictactoe" onclick="showSection('tictactoe')">🎮 Tic-Tac-Toe</button>
   <button class="nav-btn" data-target="wordsearch" onclick="showSection('wordsearch')">🔤 Word Search</button>
   <button class="nav-btn" data-target="pickledash" onclick="showSection('pickledash')">🏃 Pickle Dash</button>
+  <button class="nav-btn" data-target="memorymatch" onclick="showSection('memorymatch')">🃏 Memory Match</button>
+  <button class="nav-btn" data-target="picklecatcher" onclick="showSection('picklecatcher')">🧺 Pickle Catcher</button>
+  <button class="nav-btn" data-target="slidingpuzzle" onclick="showSection('slidingpuzzle')">🧩 Sliding Puzzle</button>
   <button class="nav-btn" data-target="pickles" onclick="showSection('pickles')">🥒 Pickle Garden</button>
   <button class="nav-btn" data-target="turtles" onclick="showSection('turtles')">🐢 Turtle Squad</button>
   <button class="nav-btn" data-target="dadjokes" onclick="showSection('dadjokes')">😂 Dad Jokes</button>
@@ -661,6 +741,23 @@
       <span class="ab-icon">🏃</span>
       <div class="ab-name" style="color:var(--lime)">Pickle Dash!</div>
       <div class="ab-desc">Endless runner<br>Jump • Dodge • Survive!</div>
+    </div>
+    <div class="arcade-badge" style="background:linear-gradient(135deg,#1e0a38,#0d0520);border-color:var(--purple)" onclick="showSection('memorymatch')">
+      <span class="ab-icon">🃏</span>
+      <div class="ab-name" style="color:var(--purple)">Memory Match</div>
+      <div class="ab-desc">Flip cards to find pairs<br>3 difficulty levels!</div>
+      <div class="ab-new">NEW!</div>
+    </div>
+    <div class="arcade-badge" style="background:linear-gradient(135deg,#300010,#1a0008);border-color:var(--hot-pink)" onclick="showSection('picklecatcher')">
+      <span class="ab-icon">🧺</span>
+      <div class="ab-name" style="color:var(--hot-pink)">Pickle Catcher</div>
+      <div class="ab-desc">Catch falling pickles<br>Dodge the onions!</div>
+      <div class="ab-new">NEW!</div>
+    </div>
+    <div class="arcade-badge" style="background:linear-gradient(135deg,#2a1500,#180d00);border-color:var(--orange)" onclick="showSection('slidingpuzzle')">
+      <span class="ab-icon">🧩</span>
+      <div class="ab-name" style="color:var(--orange)">Sliding Puzzle</div>
+      <div class="ab-desc">Slide tiles into order<br>4 themed images!</div>
       <div class="ab-new">NEW!</div>
     </div>
   </div>
@@ -830,6 +927,73 @@
   <p style="text-align:center;color:rgba(255,255,255,0.25);font-size:0.85rem;margin-top:0.6rem">
     ⌨️ Space / ↑ / W to jump &nbsp;•&nbsp; Two dots bottom-right = jumps remaining
   </p>
+</section>
+
+<!-- MEMORY MATCH -->
+<section id="memorymatch">
+  <div class="section-title" style="color:var(--purple)">🃏 Memory Match 🃏</div>
+  <p style="text-align:center;color:rgba(255,255,255,0.5);margin-bottom:1rem">
+    Flip cards to find matching pairs. Remember what you've seen!
+  </p>
+  <div class="mm-difficulty">
+    <button class="mm-diff-btn mm-active" onclick="mmStart(4)">⭐ Easy (4×4)</button>
+    <button class="mm-diff-btn" onclick="mmStart(5)">⭐⭐ Medium (5×4)</button>
+    <button class="mm-diff-btn" onclick="mmStart(6)">⭐⭐⭐ Hard (6×4)</button>
+  </div>
+  <div class="mm-stats">
+    <div class="mm-stat"><div class="mm-stat-val" id="mmMoves">0</div><div class="mm-stat-label">Moves</div></div>
+    <div class="mm-stat"><div class="mm-stat-val" id="mmPairs" style="color:var(--lime)">0</div><div class="mm-stat-label">Pairs Found</div></div>
+    <div class="mm-stat"><div class="mm-stat-val" id="mmBest" style="color:var(--yellow)">—</div><div class="mm-stat-label">Best Moves</div></div>
+  </div>
+  <div style="text-align:center">
+    <div class="mm-grid" id="mmGrid"></div>
+  </div>
+  <div id="mmStatus" style="text-align:center;font-family:'Fredoka One',cursive;font-size:1.3rem;color:var(--yellow);min-height:2rem;margin-top:1rem"></div>
+  <div style="text-align:center;margin-top:1rem">
+    <button class="game-btn btn-cyan" onclick="mmRestart()">🔀 New Game</button>
+    <button class="game-btn btn-pink" onclick="showSection('arcade')">🕹️ Back to Arcade</button>
+  </div>
+</section>
+
+<!-- PICKLE CATCHER -->
+<section id="picklecatcher">
+  <div class="section-title" style="color:var(--hot-pink)">🧺 Pickle Catcher 🥒</div>
+  <p style="text-align:center;color:rgba(255,255,255,0.5);margin-bottom:1rem">
+    Move your basket to catch pickles — dodge the onions! Mouse or arrow keys.
+  </p>
+  <div class="pc-canvas-wrap">
+    <canvas id="pcCanvas" width="600" height="400"></canvas>
+  </div>
+  <div style="text-align:center;margin-top:1rem">
+    <button class="game-btn btn-pink" onclick="showSection('arcade')">🕹️ Back to Arcade</button>
+  </div>
+  <p style="text-align:center;color:rgba(255,255,255,0.25);font-size:0.85rem;margin-top:0.6rem">
+    🖱️ Move mouse over canvas &nbsp;•&nbsp; ← → arrow keys &nbsp;•&nbsp; Tap/drag on mobile
+  </p>
+</section>
+
+<!-- SLIDING PUZZLE -->
+<section id="slidingpuzzle">
+  <div class="section-title" style="color:var(--orange)">🧩 Sliding Puzzle 🧩</div>
+  <p style="text-align:center;color:rgba(255,255,255,0.5);margin-bottom:1rem">
+    Slide tiles into the correct order. Click a tile next to the empty space to move it!
+  </p>
+  <div style="text-align:center;margin-bottom:1rem">
+    <span style="font-family:'Fredoka One',cursive;color:rgba(255,255,255,0.4);font-size:0.9rem;margin-right:0.5rem">Theme:</span>
+    <button class="mm-diff-btn" id="spTheme0" onclick="spSetTheme(0)">🥒 Pickles</button>
+    <button class="mm-diff-btn" id="spTheme1" onclick="spSetTheme(1)">🐢 Turtles</button>
+    <button class="mm-diff-btn" id="spTheme2" onclick="spSetTheme(2)">🌈 Rainbow</button>
+    <button class="mm-diff-btn" id="spTheme3" onclick="spSetTheme(3)">🚀 Space</button>
+  </div>
+  <div class="sp-wrap">
+    <div class="sp-moves" id="spMoves">Moves: 0</div>
+    <div class="sp-board" id="spBoard"></div>
+  </div>
+  <div id="spStatus" style="text-align:center;font-family:'Fredoka One',cursive;font-size:1.3rem;color:var(--yellow);min-height:2rem;margin-top:1rem"></div>
+  <div style="text-align:center;margin-top:1rem">
+    <button class="game-btn btn-orange" onclick="spShuffle()">🔀 Shuffle</button>
+    <button class="game-btn btn-cyan" onclick="showSection('arcade')">🕹️ Back to Arcade</button>
+  </div>
 </section>
 
 <footer>
@@ -1570,6 +1734,285 @@ document.getElementById('pdCanvas').addEventListener('click', pdJump);
 document.getElementById('pdCanvas').addEventListener('touchstart', e => { e.preventDefault(); pdJump(); }, {passive:false});
 
 pdDraw(); // draw idle screen on load
+
+// ===== MEMORY MATCH =====
+const MM_EMOJIS = ['🥒','🐢','🎮','🎨','🧩','📺','🌙','🎵','⭐','🌈','🦋','🍕','🚀','🦄','🌺','🐼','🍪','🏆','🎯','🎪','🔮','🦊','🌊','🎭'];
+
+let mmCards = [], mmFlipped = [], mmMatched = 0, mmMoves = 0, mmLocked = false, mmCols = 4, mmBestKey = 'mm_best_4';
+
+function mmStart(cols) {
+  mmCols = cols;
+  mmBestKey = 'mm_best_' + cols;
+  const pairs = cols === 4 ? 8 : cols === 5 ? 10 : 12;
+  document.querySelectorAll('.mm-diff-btn').forEach((b,i) => b.classList.toggle('mm-active', [4,5,6][i] === cols));
+  const chosen = MM_EMOJIS.slice(0, pairs);
+  mmCards = [...chosen, ...chosen].sort(() => Math.random()-0.5);
+  mmFlipped = []; mmMatched = 0; mmMoves = 0; mmLocked = false;
+  document.getElementById('mmMoves').textContent = '0';
+  document.getElementById('mmPairs').textContent = '0';
+  document.getElementById('mmStatus').textContent = '';
+  const best = localStorage.getItem(mmBestKey);
+  document.getElementById('mmBest').textContent = best || '—';
+  mmRender();
+}
+
+function mmRender() {
+  const grid = document.getElementById('mmGrid');
+  grid.style.gridTemplateColumns = `repeat(${mmCols}, 80px)`;
+  grid.innerHTML = '';
+  mmCards.forEach((emoji, i) => {
+    const card = document.createElement('div');
+    card.className = 'mm-card';
+    card.dataset.i = i;
+    card.innerHTML = `<div class="mm-front">?</div><div class="mm-back">${emoji}</div>`;
+    card.addEventListener('click', () => mmFlip(i));
+    grid.appendChild(card);
+  });
+}
+
+function mmFlip(i) {
+  if (mmLocked || mmFlipped.includes(i)) return;
+  const card = document.querySelector(`.mm-card[data-i="${i}"]`);
+  if (!card || card.classList.contains('matched')) return;
+  card.classList.add('flipped');
+  mmFlipped.push(i);
+  if (mmFlipped.length === 2) {
+    mmLocked = true;
+    mmMoves++;
+    document.getElementById('mmMoves').textContent = mmMoves;
+    const [a, b] = mmFlipped;
+    if (mmCards[a] === mmCards[b]) {
+      setTimeout(() => {
+        [a,b].forEach(idx => document.querySelector(`.mm-card[data-i="${idx}"]`).classList.add('matched'));
+        mmMatched++;
+        document.getElementById('mmPairs').textContent = mmMatched;
+        mmFlipped = []; mmLocked = false;
+        if (mmMatched === mmCards.length/2) mmWin();
+      }, 400);
+    } else {
+      setTimeout(() => {
+        [a,b].forEach(idx => document.querySelector(`.mm-card[data-i="${idx}"]`).classList.remove('flipped'));
+        mmFlipped = []; mmLocked = false;
+      }, 900);
+    }
+  }
+}
+
+function mmWin() {
+  const best = +localStorage.getItem(mmBestKey) || Infinity;
+  const isNew = mmMoves < best;
+  if (isNew) localStorage.setItem(mmBestKey, mmMoves);
+  document.getElementById('mmBest').textContent = Math.min(mmMoves, best);
+  document.getElementById('mmStatus').textContent = isNew
+    ? `🎉 New best: ${mmMoves} moves!` : `✅ Solved in ${mmMoves} moves!`;
+  launchConfetti();
+}
+
+function mmRestart() { mmStart(mmCols); }
+
+mmStart(4);
+
+// ===== PICKLE CATCHER =====
+const PC = { W: 600, H: 400, BW: 90 };
+let pcState = 'idle', pcScore = 0, pcHigh = +localStorage.getItem('pc_hi')||0;
+let pcLives = 3, pcFrame = 0, pcSpeed = 2.5, pcRaf;
+let pcBasketX = PC.W/2, pcTargetX = PC.W/2;
+let pcItems = [], pcParticles = [];
+let pcMouseX = PC.W/2, pcKeysDown = {};
+let pcCtxCache = null;
+function pcCtx() { return pcCtxCache||(pcCtxCache=document.getElementById('pcCanvas').getContext('2d')); }
+
+function pcStart() {
+  pcState = 'playing'; pcScore = 0; pcFrame = 0; pcSpeed = 2.5;
+  pcLives = 3; pcBasketX = PC.W/2; pcTargetX = PC.W/2;
+  pcItems = []; pcParticles = [];
+  cancelAnimationFrame(pcRaf); pcTick();
+}
+
+function pcSpawnItem() {
+  const x = 30 + Math.random()*(PC.W-60);
+  const isBad = Math.random() < (0.25 + Math.min(0.25, pcFrame/6000));
+  const badEmojis = ['🧅','💀','🌶️'];
+  const goodEmojis = ['🥒','🥒','🥒','🫙','⭐'];
+  pcItems.push({ x, y: -20, e: isBad ? badEmojis[~~(Math.random()*badEmojis.length)] : goodEmojis[~~(Math.random()*goodEmojis.length)], bad: isBad, vy: pcSpeed + Math.random()*1.5, rot: Math.random()*360 });
+}
+
+function pcTick() {
+  pcFrame++;
+  pcSpeed = 2.5 + Math.min(4, pcFrame/900);
+  const spawnRate = Math.max(35, 55 - ~~(pcFrame/300));
+  if (pcFrame % spawnRate === 0) pcSpawnItem();
+
+  // Basket movement
+  const canvas = document.getElementById('pcCanvas');
+  const rect = canvas.getBoundingClientRect();
+  const scaledMouseX = (pcMouseX - rect.left) * (PC.W / rect.width);
+  pcTargetX = Math.max(PC.BW/2+4, Math.min(PC.W-PC.BW/2-4, scaledMouseX));
+  if (pcKeysDown['ArrowLeft']) pcTargetX = Math.max(PC.BW/2+4, pcBasketX - 8);
+  if (pcKeysDown['ArrowRight']) pcTargetX = Math.min(PC.W-PC.BW/2-4, pcBasketX + 8);
+  pcBasketX += (pcTargetX - pcBasketX) * 0.25;
+
+  // Update items
+  pcItems.forEach(item => { item.y += item.vy; item.rot += 3; });
+
+  // Catch / miss
+  const basketTop = PC.H - 55, bL = pcBasketX - PC.BW/2, bR = pcBasketX + PC.BW/2;
+  for (let i = pcItems.length-1; i >= 0; i--) {
+    const item = pcItems[i];
+    if (item.y > PC.H + 20) { // missed
+      if (!item.bad) { pcLives--; if (pcLives <= 0) { pcDie(); return; } }
+      pcItems.splice(i,1); continue;
+    }
+    if (item.y >= basketTop-10 && item.y <= basketTop+20 && item.x >= bL && item.x <= bR) {
+      const pts = item.e === '⭐' ? 10 : item.bad ? 0 : 1;
+      if (item.bad) { pcLives--; for(let j=0;j<8;j++) pcParticles.push({x:item.x,y:item.y,vx:(Math.random()-0.5)*6,vy:Math.random()*-5-1,life:22,max:22,col:'#ff4db8'}); if(pcLives<=0){pcItems.splice(i,1);pcDie();return;} }
+      else { pcScore+=pts; for(let j=0;j<6;j++) pcParticles.push({x:item.x,y:item.y,vx:(Math.random()-0.5)*5,vy:Math.random()*-4-1,life:18,max:18,col:item.e==='⭐'?'#ffe94d':'#c8f135'}); }
+      pcItems.splice(i,1);
+    }
+  }
+  pcParticles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=0.2;p.life--;});
+  pcParticles=pcParticles.filter(p=>p.life>0);
+
+  pcDraw(); pcRaf = requestAnimationFrame(pcTick);
+}
+
+function pcDie() {
+  pcState = 'dead';
+  if (pcScore > pcHigh) { pcHigh = pcScore; localStorage.setItem('pc_hi', pcHigh); }
+  cancelAnimationFrame(pcRaf); pcDraw();
+}
+
+function pcDraw() {
+  const ctx = pcCtx(); const {W,H,BW} = PC;
+  // Sky
+  ctx.fillStyle = '#0d0d2b'; ctx.fillRect(0,0,W,H);
+  // Stars
+  for (let i=0;i<30;i++) { const x=(i*73)%W, y=(i*47)%140, a=0.3+0.5*Math.abs(Math.sin(pcFrame*0.03+i)); ctx.fillStyle=`rgba(255,255,255,${a.toFixed(2)})`; ctx.beginPath(); ctx.arc(x,y,0.8,0,Math.PI*2); ctx.fill(); }
+  // Ground
+  ctx.fillStyle = '#0a1a0a'; ctx.fillRect(0,H-25,W,25);
+  ctx.strokeStyle = '#00d4aa'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(0,H-25); ctx.lineTo(W,H-25); ctx.stroke();
+  // Particles
+  pcParticles.forEach(p=>{ const a=p.life/p.max; ctx.fillStyle=p.col+Math.round(a*255).toString(16).padStart(2,'0'); ctx.beginPath(); ctx.arc(p.x,p.y,3*a,0,Math.PI*2); ctx.fill(); });
+  // Items
+  ctx.textBaseline='middle'; ctx.textAlign='center';
+  pcItems.forEach(item=>{ ctx.save(); ctx.translate(item.x,item.y); ctx.rotate(item.rot*Math.PI/180); ctx.font='28px serif'; ctx.fillText(item.e,0,0); ctx.restore(); });
+  // Basket
+  const bx = pcBasketX, by = H-44;
+  ctx.font='50px serif'; ctx.textBaseline='middle'; ctx.textAlign='center';
+  ctx.fillText('🧺', bx, by);
+  // HUD
+  ctx.textAlign='left'; ctx.textBaseline='top';
+  ctx.font='bold 16px Nunito,sans-serif'; ctx.fillStyle='#ffe94d'; ctx.fillText(`⚡ ${pcScore}`, 10, 10);
+  ctx.fillStyle='rgba(255,255,255,0.3)'; ctx.font='13px Nunito,sans-serif'; ctx.fillText(`🏆 ${pcHigh}`,10,30);
+  ctx.textAlign='right'; ctx.font='18px serif'; ctx.fillText('❤️'.repeat(pcLives), W-10, 8);
+  // Overlays
+  if (pcState==='idle'||pcState==='dead') {
+    ctx.fillStyle='rgba(0,0,0,0.6)'; ctx.fillRect(0,0,W,H);
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    if (pcState==='idle') {
+      ctx.font='bold 28px "Fredoka One",cursive'; ctx.fillStyle='#ff4db8'; ctx.fillText('🧺 Pickle Catcher!',W/2,H/2-28);
+      ctx.font='16px "Fredoka One",cursive'; ctx.fillStyle='#00e5ff'; ctx.fillText('Move mouse / ← → to catch falling pickles',W/2,H/2+5);
+      ctx.font='13px "Fredoka One",cursive'; ctx.fillStyle='rgba(255,255,255,0.4)'; ctx.fillText('Dodge 🧅 onions • Miss 3 pickles = game over • ⭐ = 10 pts',W/2,H/2+30);
+      ctx.font='16px "Fredoka One",cursive'; ctx.fillStyle='#c8f135'; ctx.fillText('Click to start!',W/2,H/2+58);
+    } else {
+      ctx.font='bold 26px "Fredoka One",cursive'; ctx.fillStyle='#ff4db8'; ctx.fillText('💀 Game Over!',W/2,H/2-32);
+      ctx.font='20px "Fredoka One",cursive'; ctx.fillStyle='#ffe94d'; ctx.fillText(`Score: ${pcScore}`,W/2,H/2-4);
+      if (pcScore>=pcHigh&&pcScore>0) { ctx.fillStyle='#c8f135'; ctx.font='bold 15px "Fredoka One",cursive'; ctx.fillText('🎉 NEW HIGH SCORE!',W/2,H/2+22); }
+      else { ctx.fillStyle='rgba(255,255,255,0.35)'; ctx.font='14px "Fredoka One",cursive'; ctx.fillText(`Best: ${pcHigh}`,W/2,H/2+22); }
+      ctx.font='16px "Fredoka One",cursive'; ctx.fillStyle='#00e5ff'; ctx.fillText('Click to play again',W/2,H/2+50);
+    }
+  }
+}
+
+document.getElementById('pcCanvas').addEventListener('click', ()=>{ if(pcState!=='playing') pcStart(); });
+document.getElementById('pcCanvas').addEventListener('mousemove', e=>{ pcMouseX=e.clientX; });
+document.getElementById('pcCanvas').addEventListener('touchmove', e=>{ e.preventDefault(); pcMouseX=e.touches[0].clientX; },{passive:false});
+document.getElementById('pcCanvas').addEventListener('touchstart', e=>{ pcMouseX=e.touches[0].clientX; if(pcState!=='playing') pcStart(); },{passive:false});
+document.addEventListener('keydown', e=>{ pcKeysDown[e.code]=true; if((e.code==='ArrowLeft'||e.code==='ArrowRight')&&document.getElementById('picklecatcher').classList.contains('active')) e.preventDefault(); });
+document.addEventListener('keyup', e=>{ pcKeysDown[e.code]=false; });
+
+pcDraw();
+
+// ===== SLIDING PUZZLE =====
+const SP_THEMES = [
+  { name:'🥒 Pickles', emojis:['🥒','🫙','🌿','🧂','🥗','🌾','💚','🥬','🫛'] },
+  { name:'🐢 Turtles', emojis:['🐢','🌊','🪸','🐠','🐡','🦀','🌴','⚓','🏖️'] },
+  { name:'🌈 Rainbow', emojis:['❤️','🧡','💛','💚','💙','💜','🩷','🤍','⭐'] },
+  { name:'🚀 Space',   emojis:['🚀','⭐','🌙','🪐','☄️','🌌','👾','🛸','🌟'] },
+];
+let spTiles = [], spEmpty = 8, spMoves = 0, spTheme = 0, spSolving = false;
+
+function spSetTheme(idx) {
+  spTheme = idx;
+  document.querySelectorAll('[id^=spTheme]').forEach((b,i) => b.classList.toggle('mm-active', i===idx));
+  spInit();
+}
+
+function spInit() {
+  spTiles = [0,1,2,3,4,5,6,7,8]; // solved order; index 8 = empty
+  spEmpty = 8; spMoves = 0; spSolving = false;
+  document.getElementById('spMoves').textContent = 'Moves: 0';
+  document.getElementById('spStatus').textContent = '';
+  spRender();
+}
+
+function spShuffle() {
+  spInit();
+  // Make 200 random valid moves to scramble
+  for (let i = 0; i < 200; i++) {
+    const neighbors = spNeighbors(spEmpty);
+    const pick = neighbors[~~(Math.random()*neighbors.length)];
+    spSwap(pick, spEmpty); spEmpty = pick;
+  }
+  spMoves = 0;
+  document.getElementById('spMoves').textContent = 'Moves: 0';
+  document.getElementById('spStatus').textContent = '';
+  spRender();
+}
+
+function spNeighbors(pos) {
+  const r=~~(pos/3), c=pos%3, result=[];
+  if(r>0) result.push(pos-3); if(r<2) result.push(pos+3);
+  if(c>0) result.push(pos-1); if(c<2) result.push(pos+1);
+  return result;
+}
+
+function spSwap(a, b) { [spTiles[a], spTiles[b]] = [spTiles[b], spTiles[a]]; }
+
+function spClick(pos) {
+  if (spSolving) return;
+  if (!spNeighbors(spEmpty).includes(pos)) return;
+  spSwap(pos, spEmpty); spEmpty = pos; spMoves++;
+  document.getElementById('spMoves').textContent = `Moves: ${spMoves}`;
+  spRender();
+  if (spTiles.every((v,i) => v === i)) spWin();
+}
+
+function spWin() {
+  spSolving = true;
+  document.getElementById('spStatus').textContent = `🎉 Solved in ${spMoves} moves!`;
+  launchConfetti();
+  // Flash all tiles
+  document.querySelectorAll('.sp-tile:not(.sp-empty)').forEach((t,i) => setTimeout(()=>t.classList.add('sp-solved'), i*60));
+}
+
+function spRender() {
+  const board = document.getElementById('spBoard');
+  board.style.gridTemplateColumns = 'repeat(3, auto)';
+  board.innerHTML = '';
+  const emojis = SP_THEMES[spTheme].emojis;
+  spTiles.forEach((val, pos) => {
+    const tile = document.createElement('div');
+    tile.className = 'sp-tile' + (val===8?' sp-empty':'');
+    tile.textContent = val===8 ? '' : emojis[val];
+    tile.addEventListener('click', ()=>spClick(pos));
+    board.appendChild(tile);
+  });
+}
+
+// Init all three with theme 0 active
+document.getElementById('spTheme0').classList.add('mm-active');
+spInit(); spShuffle();
 
 // Word search pointer events (set up once)
 document.getElementById('wsGrid').addEventListener('pointerdown', wsOnDown);
