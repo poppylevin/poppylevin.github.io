@@ -588,6 +588,21 @@
   }
   .sp-wrap { display: flex; flex-direction: column; align-items: center; }
   .sp-moves { font-family: 'Fredoka One', cursive; font-size: 1.1rem; color: var(--orange); margin-bottom: 0.8rem; }
+  .sp-layout { display: flex; gap: 2rem; align-items: flex-start; justify-content: center; flex-wrap: wrap; }
+  .sp-goal { display: flex; flex-direction: column; align-items: center; gap: 0.4rem; }
+  .sp-goal-label { font-family: 'Fredoka One', cursive; font-size: 0.85rem; color: rgba(255,255,255,0.4); }
+  .sp-goal-board {
+    display: inline-grid; grid-template-columns: repeat(3, auto); gap: 3px; padding: 6px;
+    background: rgba(255,255,255,0.03); border: 2px solid rgba(200,241,53,0.25); border-radius: 12px;
+  }
+  .sp-goal-tile {
+    width: 36px; height: 36px; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+    background: linear-gradient(135deg, #0a2515, #051a0d);
+    border: 1.5px solid var(--lime);
+  }
+  .sp-goal-tile.sp-goal-empty { background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.05); }
   @media (max-width: 480px) { .sp-tile { width: 72px; height: 72px; font-size: 1.8rem; } }
   @media (max-width: 360px) { .sp-tile { width: 60px; height: 60px; font-size: 1.5rem; } }
 </style>
@@ -985,9 +1000,15 @@
     <button class="mm-diff-btn" id="spTheme2" onclick="spSetTheme(2)">🌈 Rainbow</button>
     <button class="mm-diff-btn" id="spTheme3" onclick="spSetTheme(3)">🚀 Space</button>
   </div>
-  <div class="sp-wrap">
-    <div class="sp-moves" id="spMoves">Moves: 0</div>
-    <div class="sp-board" id="spBoard"></div>
+  <div class="sp-layout">
+    <div class="sp-wrap">
+      <div class="sp-moves" id="spMoves">Moves: 0</div>
+      <div class="sp-board" id="spBoard"></div>
+    </div>
+    <div class="sp-goal">
+      <div class="sp-goal-label">Goal</div>
+      <div class="sp-goal-board" id="spGoalBoard"></div>
+    </div>
   </div>
   <div id="spStatus" style="text-align:center;font-family:'Fredoka One',cursive;font-size:1.3rem;color:var(--yellow);min-height:2rem;margin-top:1rem"></div>
   <div style="text-align:center;margin-top:1rem">
@@ -1954,6 +1975,7 @@ function spInit() {
   document.getElementById('spMoves').textContent = 'Moves: 0';
   document.getElementById('spStatus').textContent = '';
   spRender();
+  spRenderGoal();
 }
 
 function spShuffle() {
@@ -2008,6 +2030,18 @@ function spRender() {
     tile.addEventListener('click', ()=>spClick(pos));
     board.appendChild(tile);
   });
+}
+
+function spRenderGoal() {
+  const goal = document.getElementById('spGoalBoard');
+  goal.innerHTML = '';
+  const emojis = SP_THEMES[spTheme].emojis;
+  for (let i = 0; i < 9; i++) {
+    const tile = document.createElement('div');
+    tile.className = 'sp-goal-tile' + (i===8?' sp-goal-empty':'');
+    tile.textContent = i===8 ? '' : emojis[i];
+    goal.appendChild(tile);
+  }
 }
 
 // Init all three with theme 0 active
