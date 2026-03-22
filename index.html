@@ -123,6 +123,10 @@
     background: var(--hot-pink); border-color: var(--hot-pink);
     transform: scale(1.05); box-shadow: 0 0 15px rgba(255,77,184,0.4);
   }
+  @media (max-width: 480px) {
+    nav { gap: 0.3rem; padding: 0.5rem 0.5rem; }
+    .nav-btn { font-size: 0.8rem; padding: 0.3rem 0.7rem; }
+  }
 
   /* ===== SECTIONS ===== */
   section {
@@ -632,14 +636,8 @@
   <button class="nav-btn active" data-target="about" onclick="showSection('about')">🌟 About</button>
   <button class="nav-btn" data-target="interests" onclick="showSection('interests')">🎯 Interests</button>
   <button class="nav-btn" data-target="arcade" onclick="showSection('arcade')">🕹️ Arcade</button>
-  <button class="nav-btn" data-target="tictactoe" onclick="showSection('tictactoe')">🎮 Tic-Tac-Toe</button>
-  <button class="nav-btn" data-target="wordsearch" onclick="showSection('wordsearch')">🔤 Word Search</button>
-  <button class="nav-btn" data-target="pickledash" onclick="showSection('pickledash')">🏃 Pickle Dash</button>
-  <button class="nav-btn" data-target="memorymatch" onclick="showSection('memorymatch')">🃏 Memory Match</button>
-  <button class="nav-btn" data-target="picklecatcher" onclick="showSection('picklecatcher')">🧺 Pickle Catcher</button>
-  <button class="nav-btn" data-target="slidingpuzzle" onclick="showSection('slidingpuzzle')">🧩 Sliding Puzzle</button>
-  <button class="nav-btn" data-target="pickles" onclick="showSection('pickles')">🥒 Pickle Garden</button>
-  <button class="nav-btn" data-target="turtles" onclick="showSection('turtles')">🐢 Turtle Squad</button>
+  <button class="nav-btn" data-target="pickles" onclick="showSection('pickles')">🥒 Pickles</button>
+  <button class="nav-btn" data-target="turtles" onclick="showSection('turtles')">🐢 Turtles</button>
   <button class="nav-btn" data-target="dadjokes" onclick="showSection('dadjokes')">😂 Dad Jokes</button>
 </nav>
 
